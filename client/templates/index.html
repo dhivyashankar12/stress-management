@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Assessment Questionnaire</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 2.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-group .icon {
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+        }
+
+        .slider-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .slider-container:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .value-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .current-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 3rem;
+            animation: slideInUp 0.6s ease-out 0.9s both;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 1.2rem 4rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(238, 90, 36, 0.6);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .submit-btn {
+                padding: 1rem 3rem;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Stress Assessment</h1>
+            <p>Please adjust the sliders to match your current state</p>
+        </div>
+
+        <div class="form-container">
+            <form method="POST" action="{{ url_for('index') }}">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sr"><span class="icon">😴</span>Snoring Rate</label>
+                        <div class="slider-container">
+                            <input type="range" min="1" max="100" value="45" id="sr" name="sr" required>
+                            <div class="value-display">
+                             
+                                <div class="current-value" id="srs">45</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rr"><span class="icon">🫁</span>Respiration Rate (breaths/min)</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="100" value="16" id="rr" name="rr" required>
+                            <div class="value-display">
+                               
+                                <div class="current-value" id="rrs">16</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="t"><span class="icon">🌡️</span>Body Temperature (°F)</label>
+                        <div class="slider-container">
+                            <input type="range" min="85" max="99" value="95" id="t" name="t" required>
+                            <div class="value-display">
+                             
+                                <div class="current-value" id="ts">95</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lm"><span class="icon">🦵</span>Limb Movements During Sleep</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="30" value="15" id="lm" name="lm" required>
+                            <div class="value-display">
+                           
+                                <div class="current-value" id="lms">15</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bo"><span class="icon">🩸</span>Blood Oxygen Level (%)</label>
+                        <div class="slider-container">
+                            <input type="range" min="82" max="99" value="95" id="bo" name="bo" required>
+                            <div class="value-display">
+                           
+                                <div class="current-value" id="bos">95</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rem"><span class="icon">💭</span>Dream Vividness</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="100" value="85" id="rem" name="rem" required>
+                            <div class="value-display">
+                           
+                                <div class="current-value" id="rems">85</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sr1"><span class="icon">⏰</span>Sleeping Hours</label>
+                        <div class="slider-container">
+                            <input type="range" min="0" max="9" value="7" id="sr1" name="sr1" required>
+                            <div class="value-display">
+                           
+                                <div class="current-value" id="sr1s">7</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hr"><span class="icon">❤️</span>Heart Rate (bpm)</label>
+                        <div class="slider-container">
+                            <input type="range" min="50" max="120" value="85" id="hr" name="hr" required>
+                            <div class="value-display">
+                            
+                                <div class="current-value" id="hrs">85</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button type="submit" class="submit-btn">🔍 Analyze My Stress Level</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const sliders = document.querySelectorAll("input[type=range]");
+        const progressFill = document.getElementById('progressFill');
+        
+        let completedFields = 0;
+        
+        sliders.forEach(function(slider) {
+            const output = document.getElementById(slider.id + "s");
+            output.innerHTML = slider.value;
+            
+            slider.addEventListener("input", function() {
+                output.innerHTML = this.value;
+                
+                // Update progress bar
+                const progress = ((Array.from(sliders).indexOf(slider) + 1) / sliders.length) * 100;
+                progressFill.style.width = progress + '%';
+                
+                // Add visual feedback
+                const container = this.closest('.slider-container');
+                container.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    container.style.transform = 'scale(1)';
+                }, 200);
+            });
+            
+            // Initialize progress bar
+            slider.addEventListener("change", function() {
+                completedFields = Array.from(sliders).filter(s => s.value !== s.defaultValue).length;
+                const progress = (completedFields / sliders.length) * 100;
+                progressFill.style.width = progress + '%';
+            });
+        });
+
+        // Add smooth scroll behavior for better UX
+        document.querySelectorAll('.form-group').forEach((group, index) => {
+            const slider = group.querySelector('input[type="range"]');
+            slider.addEventListener('focus', () => {
+                group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+    </script>
+</body>
+</html>
